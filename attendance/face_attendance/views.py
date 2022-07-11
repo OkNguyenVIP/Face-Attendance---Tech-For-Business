@@ -39,8 +39,6 @@ from urllib import request as request_urllib
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
-
-
 def faceAttendence(request):
     controlCountdown = ControlCountdown.objects.all()
     return render(request, 'face_attendance/index.html',

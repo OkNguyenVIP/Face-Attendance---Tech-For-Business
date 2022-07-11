@@ -7,7 +7,6 @@ from django.shortcuts import redirect
 import os
 import cv2
 
-
 # Create your views here.
 
 

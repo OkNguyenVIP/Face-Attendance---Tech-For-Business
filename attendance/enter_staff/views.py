@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Present, Time
 import datetime
 from django.contrib.auth.models import User
+from enter_staff.models import ControlCountdown
 
 
 # from django.contrib.auth.decorators import login_required
@@ -36,4 +37,7 @@ def addInformation(request):
         present.save()
 
         openWebcam = "open"
-    return render(request, 'take_photo/index.html', {'username': request.POST['username'], "openWebcam": "open"})
+    
+    controlCountdown = ControlCountdown.objects.all()
+
+    return render(request, 'take_photo/index.html', {'username': request.POST['username'], "openWebcam": "open", "photoCountdown": controlCountdown[0].photoCountdown})

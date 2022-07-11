@@ -53,17 +53,22 @@ function enterA() {
             $('#img').attr("src", avatarRedMobile);
         }
 
-        var interval = setInterval(async () => {
-            var position = 0;
-            // var countdown = photoCountdown;
-            var countdown = 0;
+        var position = 0;
+        console.log("photoCountdown:", photoCountdown);
+        var countdown = photoCountdown * 1;
+        var photoCountdownInt = photoCountdown * 1;
 
+        var data_post = '<form id="data_uri" action="' + savePhoto + '" method="POST">';
+
+        if (photoCountdownInt == 0) {
+            $('#img').attr("src", avatarYellowPC);
+        }
+
+        var interval = setInterval(async () => {
 
             console.log("Pass 2", "OK");
 
             const detects = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions());
-
-            // Webcam.attach('#video');
 
             if (detects[0] && !isPaused) {
                 if (detects[0]?._box) {
@@ -73,70 +78,119 @@ function enterA() {
                             detects[0]._box._y > ((displaySize.height / 2) - 130) &&
                             detects[0]._box._y + detects[0]._box._height < ((displaySize.height / 2) - 130) + 260) {
 
-                            // Quan trọng
-                            isPaused = true;
-
-                            var data_post = '<form id="data_uri" action="' + savePhoto + '" method="POST">';
-
-                            console.log("countdown:", countdown);
-
-                            if (countdown == "3") {
+                            if (countdown != 4) {
+                                console.log("countdown: ", countdown);
+                            }
+                            if (countdown == 3) {
+                                isPaused = true;
                                 if (video.videoWidth - video.videoHeight > 0) {
                                     $('#img').attr("src", avatarGreenPC3);
+                                    if ($('#img').attr("src") == avatarGreenPC3) {
+                                        isPaused = false;
+                                    }
                                 } else {
                                     $('#img').attr("src", avatarGreenMobile3);
+                                    if ($('#img').attr("src") == avatarGreenMobile3) {
+                                        isPaused = false;
+                                    }
                                 }
-                            } else if (countdown == "2") {
+                            } else if (countdown == 2) {
+                                isPaused = true;
                                 if (video.videoWidth - video.videoHeight > 0) {
                                     $('#img').attr("src", avatarGreenPC2);
+                                    if ($('#img').attr("src") == avatarGreenPC2) {
+                                        isPaused = false;
+                                    }
                                 } else {
                                     $('#img').attr("src", avatarGreenMobile2);
+                                    if ($('#img').attr("src") == avatarGreenMobile2) {
+                                        isPaused = false;
+                                    }
                                 }
-                            } else if (countdown == "1") {
+                            } else if (countdown == 1) {
+                                isPaused = true;
                                 if (video.videoWidth - video.videoHeight > 0) {
                                     $('#img').attr("src", avatarGreenPC1);
+                                    if ($('#img').attr("src") == avatarGreenPC1) {
+                                        isPaused = false;
+                                    }
                                 } else {
                                     $('#img').attr("src", avatarGreenMobile1);
+                                    if ($('#img').attr("src") == avatarGreenMobile1) {
+                                        isPaused = false;
+                                    }
+                                }
+                            } else if (countdown == 0) {
+                                isPaused = true;
+                                if (video.videoWidth - video.videoHeight > 0) {
+                                    $('#img').attr("src", avatarGreenPCS);
+                                    if ($('#img').attr("src") == avatarGreenPCS) {
+                                        isPaused = false;
+                                    }
+                                } else {
+                                    $('#img').attr("src", avatarGreenMobileS);
+                                    if ($('#img').attr("src") == avatarGreenMobileS) {
+                                        isPaused = false;
+                                    }
                                 }
                             } else if (countdown <= 0) {
+                                // Quan trọng
+                                isPaused = true;
+
                                 while (position <= 20) {
                                     Webcam.snap(function (data_uri) {
                                         image = new Image();
                                         image.src = data_uri;
 
-                                        console.log("Pass 3", "OK");
-
                                         data_post += '<input type="hidden" name="data_uri_' + position + '" value="' + data_uri + '">';
 
                                         console.log("position: ", position);
-                                        position++;
 
-                                        console.log("Pass 8", "OK");
+                                        position++;
                                     });
                                 }
-
-                                console.log("Pass 9", "OK");
 
                                 data_post += '<input type="hidden" name="username" value="' + username + '">';
 
                                 data_post += '<input type="hidden" name="is_mobile" value="' + is_mobile + '">';
-
                                 data_post += '</form>';
-
                                 document.getElementById("form").innerHTML = data_post;
 
                                 document.getElementById("data_uri").submit();
 
-                                console.log("Pass 10", "OK");
-
                                 clearInterval(interval);
                             }
-
                             countdown--;
+                        } else {
+                            countdown = photoCountdown * 1;
+                            if (video.videoWidth - video.videoHeight > 0) {
+                                $('#img').attr("src", avatarRedPC);
+                            } else {
+                                $('#img').attr("src", avatarRedMobile);
+                            }
+                        }
+                    } else {
+                        countdown = photoCountdown * 1;
+                        if (video.videoWidth - video.videoHeight > 0) {
+                            $('#img').attr("src", avatarRedPC);
+                        } else {
+                            $('#img').attr("src", avatarRedMobile);
                         }
                     }
                 } else {
-                    countdown = photoCountdown;
+                    countdown = photoCountdown * 1;
+                    if (video.videoWidth - video.videoHeight > 0) {
+                        $('#img').attr("src", avatarRedPC);
+                    } else {
+                        $('#img').attr("src", avatarRedMobile);
+                    }
+                }
+            } else {
+                countdown = photoCountdown * 1;
+                if (video.videoWidth - video.videoHeight > 0) {
+                    $('#img').attr("src", avatarRedPC);
+                } else {
+                    $('#img').attr("src", avatarRedMobile);
                 }
             }
         }, 1000);
@@ -253,7 +307,7 @@ function faceA() {
                                 } else if (countdown <= 0) {
                                     // Quan trọng
                                     isPaused = true;
-                                    
+
                                     $('#img').attr("src", avatarGreenPCS);
 
                                     console.log("Pass 3.0", "OK");
